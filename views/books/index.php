@@ -49,14 +49,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 
                     <?php
-                        $authors = Books::findOne($book['book_id'])->booksAuthors; // getting authors objects via hasMany method
+                        //$authors = Books::findOne($book['book_id'])->booksAuthors; // getting authors objects via hasMany method
+                    
+                        $authors = $book->booksAuthors;
+                        
                         $authors_ids = [];
 
                         foreach ($authors as $author) {
                             $authors_ids[] = $author->author_id;
                         }
 
-                        $authors_names = Authors::find()->asArray()->where(['author_id' => $authors_ids])->all();
+                        //$authors_names = Authors::find()->asArray()->where(['author_id' => $authors_ids])->all();
                     ?>
                 
                 
