@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\Books;
+use app\models\Authors;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BooksSearch */
@@ -16,34 +18,54 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* Html::a('Create Books', ['create'], ['class' => 'btn btn-success'])*/ ?>
+        <?php /* Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) */ ?>
     </p>
     <?php /* GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+      'dataProvider' => $dataProvider,
+      'filterModel' => $searchModel,
+      'columns' => [
+      ['class' => 'yii\grid\SerialColumn'],
 
-            'book_id',
-            'book_title:ntext',
+      'book_id',
+      'book_title:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); */?>
-    
-    
-    
-            <?php foreach($books as $book) : ?>
+      ['class' => 'yii\grid\ActionColumn'],
+      ],
+      ]); */ ?>
 
+
+
+    <?php foreach($books as $book) : ?>
         
-        <div class="some">
-            <a href="#"> <?php //echo $book['book_title']; ?> </a>
-        </div>
+        <?php 
+        
+            // getting authors objects via hasMany method 
+            $authors = Books::findOne($book['book_id'])->booksAuthors;
+            $authors_ids = []; 
+
+            foreach ($authors as $author) {
+                //echo $author->author_id . '<br>';
+                $authors_ids[] = $author->author_id;
+            }
+
+            $authors_names = Authors::find()->asArray()->where(['author_id' => $authors_ids])->all();
+
+            //debug($authors_names) ;
+        
+        ?>
     
-    <?php //debug($book) ?>
+        <div class="some">
+            <a href="#"> <?= $book['book_title']  ?> </a>
+        </div>
+
+        <?php foreach($authors_names as $name) : ?>
+
+            <span>( <?= $name['author_name'] ?> )</span>
 
         <?php endforeach; ?>
-    
-    <?= $books->BookAuthors ?>
+        
+        
+    <?php endforeach; ?>
+
 
 </div>
