@@ -34,38 +34,52 @@ $this->params['breadcrumbs'][] = $this->title;
       ]); */ ?>
 
 
-
-    <?php foreach($books as $book) : ?>
         
-        <?php 
-        
-            // getting authors objects via hasMany method 
-            $authors = Books::findOne($book['book_id'])->booksAuthors;
-            $authors_ids = []; 
+            
+            
+            <table class="table-bordered table-striped table">
+                <tr>
+                    <th>Book ID</th>
+                    <th>Book title</th>
+                    <th>Author names</th>
+                    <th>Edit book</th>
+                    <th>Delete book</th>
+                </tr>
+                <?php foreach ($books as $book): ?>
+                
+                
+                    <?php
+                        $authors = Books::findOne($book['book_id'])->booksAuthors; // getting authors objects via hasMany method
+                        $authors_ids = [];
 
-            foreach ($authors as $author) {
-                //echo $author->author_id . '<br>';
-                $authors_ids[] = $author->author_id;
-            }
+                        foreach ($authors as $author) {
+                            $authors_ids[] = $author->author_id;
+                        }
 
-            $authors_names = Authors::find()->asArray()->where(['author_id' => $authors_ids])->all();
-
-            //debug($authors_names) ;
-        
-        ?>
-    
-        <div class="some">
-            <a href="#"> <?= $book['book_title']  ?> </a>
-        </div>
-
-        <?php foreach($authors_names as $name) : ?>
-
-            <span>( <?= $name['author_name'] ?> )</span>
-
-        <?php endforeach; ?>
-        
-        
-    <?php endforeach; ?>
+                        $authors_names = Authors::find()->asArray()->where(['author_id' => $authors_ids])->all();
+                    ?>
+                
+                
+                    <tr>
+                        <td><?= $book['book_id'] ?></td>
+                        <td><?= $book['book_title'] ?></td>
+                        <td>
+                                <?php 
+                                    $authors_str = [];
+                                    foreach ($authors_names as $name) {
+                                        $authors_str[] = $name['author_name'];
+                                    }
+                                    
+                                    echo implode(", ", $authors_str);
+                                
+                                ?>
+                            
+                        </td>
+                        <td><a href="/admin/book/update/<?php //echo $book['book_id']; ?>" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></td>
+                        <td><a href="/admin/book/delete/<?php //echo $book['book_id']; ?>" title="Удалить"><i class="fa fa-times"></i></a></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
 
 
 </div>

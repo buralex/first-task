@@ -45,7 +45,16 @@ class BooksController extends Controller
         
         //$books = Books::findOne(70);
         
-        $books = Books::find()->asArray()->all();
+        
+        //$books = Books::find()->asArray()->all();
+        
+        $books = Books::find()->with('booksAuthors')->all();
+        
+        debug($books[1]->booksAuthors);
+        
+        
+        die;
+        
         //$authors_ids = [];
         
         
