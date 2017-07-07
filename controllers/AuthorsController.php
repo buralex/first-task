@@ -35,13 +35,12 @@ class AuthorsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AuthorsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $authors = Authors::find()->with('books')->limit(100)->all();
+        
+        //debug($authors);
+        
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', compact('authors'));
     }
 
     /**

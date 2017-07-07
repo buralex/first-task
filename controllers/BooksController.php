@@ -9,6 +9,7 @@ use app\models\BooksSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Query;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -36,47 +37,24 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
-        //$searchModel = new BooksSearch();
-        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        //$books = Books::find()->asArray()->where(['book_id' => 58])->limit(1)->all();
-        
-        
-        
-        //$books = Books::findOne(70);
-        
-        
-        //$books = Books::find()->asArray()->all();
-        
-        //$books = Books::find()->with('booksAuthors')->all();
-        
-        $books = Books::find()->with('authors')->all();
-        
-        debug($books);      
-        die;
-        
-        //$authors_ids = [];
-        
-        
-//        foreach ($books as $book) {
-//            //debug($book['book_title']);
-//            
-//            $authors = Books::findOne($book['book_id'])->booksAuthors;
-//            
-//
-//            foreach ($authors as $author) {
-//                $authors_ids[] = $author->author_id;
-//                //debug($author_id->author_id);
-//            }
-//            
-//        }
-        
-        //debug($authors_ids); die;
-        
-        
-        //$authors_ids = Authors::find()->asArray()->where()->all();
+        $books = Books::find()->with('authors')->limit(100)->all();
+//        
+//                $sql = ('SELECT book_title, authors.author_name, books.id FROM books '
+//				.'LEFT JOIN books_authors ON books.id = books_authors.book_id '
+//				.'LEFT JOIN authors ON books_authors.author_id = authors.id');
+//        
+//        $books = Books::findBySql($sql)->all();
+//        
+//        $books = Yii::$app->db->createCommand($sql)
+//            ->queryAll();
+//        debug($books);
+//        
+//        
+//        
+//        die;
 
-        return $this->render('index', compact('dataProvider', 'searchModel', 'books', 'authors_ids') );
+        return $this->render('index', compact('books') );
     }
     
     

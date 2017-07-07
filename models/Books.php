@@ -39,27 +39,18 @@ class Books extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'book_id' => 'Book ID',
+            'id' => 'ID',
             'book_title' => 'Book Title',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBooksAuthors()
-    {
-        return $this->hasMany(BooksAuthors::className(), ['book_id' => 'book_id'])
-                ->viaTable('books_authors', ['book_id' => 'id']);
-    }
-    
+    }  
     
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getAuthors()
     {
-        return $this->hasMany(Authors::className(), ['author_id' => 'book_id'])
-                ->viaTable('books_authors', ['book_id' => 'book_id']);
+        
+        return $this->hasMany(Authors::className(), ['id' => 'author_id'])
+                ->viaTable('books_authors', ['book_id' => 'id']);
     }
 }
