@@ -10,9 +10,23 @@ use yii\widgets\ActiveForm;
 
 <div class="books-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php //debug($model['authors']);die;
+    $form = ActiveForm::begin(); ?>
+    
 
-    <?= $form->field($model, 'book_title')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'book_title')->textarea(['rows' => 1]) ?>
+    
+    <br>
+    <br>
+    
+    <?php foreach( $model['authors'] as $author ) : ?>
+
+        <?= $form->field($author, 'author_name')->textarea(['rows' => 1]) ?>
+
+    <?php endforeach; ?>
+    
+    
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -36,8 +36,8 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
-//        $searchModel = new BooksSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new BooksSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 //
 //        return $this->render('index', [
 //            'searchModel' => $searchModel,
@@ -57,7 +57,7 @@ class BooksController extends Controller
                 ->limit($pagination->limit)
                 ->all();
 
-        return $this->render('index', compact('books', 'pagination') );
+        return $this->render('index', compact('books', 'pagination', 'dataProvider', 'searchModel') );
     }
 
     /**
@@ -100,12 +100,34 @@ class BooksController extends Controller
     {
         $model = $this->findModel($id);
 
+        
+        $model = Books::find()
+                        ->with('authors')
+                        ->where(['id' => $id])
+                        ->one();
+//
+//        //debug(array_values($model['authors']));die;
+//        $authors = [];
+//        
+//        foreach ($model['authors'] as $author) {
+//            
+//            $authors[] = $author['author_name'];
+//        }
+//        
+//        //debug($authors);die;
+//        $authors_str = implode(", ", $authors);
+//        
+//        $model->$authors_str = $authors_str;
+        
+        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
+            debug(Yii::$app->request->post());die;
+            
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('update', compact('model'));
         }
     }
 

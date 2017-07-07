@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php /* GridView::widget([
+    <?php GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]);*/ ?>
+    ]);?>
     
     
     <table class="table-bordered table-striped table">
