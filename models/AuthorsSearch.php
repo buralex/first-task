@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-use Yii; 
+use Yii;
 use yii\base\Model;
-use yii\data\ActiveDataProvider; 
+use yii\data\ActiveDataProvider;
 use app\models\Authors;
 
 /**
@@ -18,8 +18,8 @@ class AuthorsSearch extends Authors
     public function rules()
     {
         return [
-            [['author_id'], 'integer'],
-            [['author_name', 'author_pseudonim'], 'safe'],
+            [['id'], 'integer'],
+            [['author_name'], 'safe'],
         ];
     }
 
@@ -59,11 +59,10 @@ class AuthorsSearch extends Authors
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'author_id' => $this->author_id,
+            'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'author_name', $this->author_name])
-            ->andFilterWhere(['like', 'author_pseudonim', $this->author_pseudonim]);
+        $query->andFilterWhere(['like', 'author_name', $this->author_name]);
 
         return $dataProvider;
     }

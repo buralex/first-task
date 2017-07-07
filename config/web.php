@@ -45,8 +45,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                //'manage-books' => 'books/index',
-                'library' => 'library/index',
+
+                'authors/update/<id:\d+>' => 'authors/update',
                 '<action:home|about|contact|login>' => 'site/<action>',
                 
             ],

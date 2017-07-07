@@ -7,9 +7,8 @@ use Yii;
 /**
  * This is the model class for table "authors".
  *
- * @property integer $author_id
+ * @property integer $id
  * @property string $author_name
- * @property string $author_pseudonim
  *
  * @property BooksAuthors[] $booksAuthors
  */
@@ -29,8 +28,8 @@ class Authors extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['author_name', 'author_pseudonim'], 'required'],
-            [['author_name', 'author_pseudonim'], 'string'],
+            [['author_name'], 'required'],
+            [['author_name'], 'string'],
         ];
     }
 
@@ -40,9 +39,8 @@ class Authors extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'author_id' => 'Author ID',
+            'id' => 'ID',
             'author_name' => 'Author Name',
-            'author_pseudonim' => 'Author Pseudonim',
         ];
     }
 
@@ -51,7 +49,7 @@ class Authors extends \yii\db\ActiveRecord
      */
     public function getBooksAuthors()
     {
-        return $this->hasMany(BooksAuthors::className(), ['author_id' => 'author_id']);
+        return $this->hasMany(BooksAuthors::className(), ['author_id' => 'id']);
     }
     
     /**

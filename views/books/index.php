@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\Books;
-use app\models\Authors;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BooksSearch */
@@ -18,67 +16,56 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) */ ?>
+        <?= Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php /* GridView::widget([
-      'dataProvider' => $dataProvider,
-      'filterModel' => $searchModel,
-      'columns' => [
-      ['class' => 'yii\grid\SerialColumn'],
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
-      'book_id',
-      'book_title:ntext',
+            'id',
+            'book_title:ntext',
 
-      ['class' => 'yii\grid\ActionColumn'],
-      ],
-      ]); */ ?>
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]);*/ ?>
+    
+    
+    <table class="table-bordered table-striped table">
+        <tr>
+            <th>Book ID</th>
+            <th>Book title</th>
+            <th>Author names</th>
+            <th>Edit book</th>
+            <th>Delete book</th>
+        </tr>
+        <?php foreach ($books as $book): ?>
 
 
-        
-            
-            <table class="table-bordered table-striped table">
-                <tr>
-                    <th>Book ID</th>
-                    <th>Book title</th>
-                    <th>Author names</th>
-                    <th>Edit book</th>
-                    <th>Delete book</th>
-                </tr>
-                <?php foreach ($books as $book): ?>
-                
-                
+            <?php
+            $author_names = [];
+            foreach ($book['authors'] as $author) {
+                $author_names[] = $author['author_name'];
+            }
+            ?>
+
+
+            <tr>
+                <td><?= $book['id'] ?></td>
+                <td><?= $book['book_title'] ?></td>
+                <td>
                     <?php
-                        
-                        $author_names = [];
-
-                        foreach ( $book['authors'] as $author ) {
-
-                            $author_names[] = $author['author_name'];
-                            
-                        }
-
+                    $authors_str = [];
+                    foreach ($author_names as $name) {
+                        $authors_str[] = $name;
+                    }
+                    echo implode(", ", $authors_str);
                     ?>
-                
-                
-                    <tr>
-                        <td><?= $book['id'] ?></td>
-                        <td><?= $book['book_title'] ?></td>
-                        <td>
-                            <?php 
-                                $authors_str = [];
-                                foreach ($author_names as $name) {
-                                    $authors_str[] = $name;
-                                }
-
-                                echo implode(", ", $authors_str);
-
-                            ?>
-                        </td>
-                        <td><a href="/admin/book/update/<?php //echo $book['book_id']; ?>" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></td>
-                        <td><a href="/admin/book/delete/<?php //echo $book['book_id']; ?>" title="Удалить"><i class="fa fa-times"></i></a></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-
-
+                </td>
+                <td><a href="/admin/book/update/<?php //echo $book['book_id'];  ?>" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></td>
+                <td><a href="/admin/book/delete/<?php //echo $book['book_id'];   ?>" title="Удалить"><i class="fa fa-times"></i></a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
 </div>

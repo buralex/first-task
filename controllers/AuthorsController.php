@@ -35,11 +35,18 @@ class AuthorsController extends Controller
      */
     public function actionIndex()
     {
+//        $searchModel = new AuthorsSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+        
         $authors = Authors::find()->with('books')->limit(100)->all();
         
         //debug($authors);
         
-
         return $this->render('index', compact('authors'));
     }
 
@@ -65,7 +72,7 @@ class AuthorsController extends Controller
         $model = new Authors();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->author_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -84,7 +91,7 @@ class AuthorsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->author_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

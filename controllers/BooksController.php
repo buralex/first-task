@@ -4,12 +4,10 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Books;
-use app\models\Authors;
 use app\models\BooksSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\db\Query;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -37,27 +35,18 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
+//        $searchModel = new BooksSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
         
         $books = Books::find()->with('authors')->limit(100)->all();
-//        
-//                $sql = ('SELECT book_title, authors.author_name, books.id FROM books '
-//				.'LEFT JOIN books_authors ON books.id = books_authors.book_id '
-//				.'LEFT JOIN authors ON books_authors.author_id = authors.id');
-//        
-//        $books = Books::findBySql($sql)->all();
-//        
-//        $books = Yii::$app->db->createCommand($sql)
-//            ->queryAll();
-//        debug($books);
-//        
-//        
-//        
-//        die;
 
         return $this->render('index', compact('books') );
     }
-    
-    
 
     /**
      * Displays a single Books model.
@@ -81,7 +70,7 @@ class BooksController extends Controller
         $model = new Books();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->book_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -100,7 +89,7 @@ class BooksController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->book_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

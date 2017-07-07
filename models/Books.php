@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "books".
  *
- * @property integer $book_id
+ * @property integer $id
  * @property string $book_title
  *
  * @property BooksAuthors[] $booksAuthors
@@ -42,7 +42,15 @@ class Books extends \yii\db\ActiveRecord
             'id' => 'ID',
             'book_title' => 'Book Title',
         ];
-    }  
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBooksAuthors()
+    {
+        return $this->hasMany(BooksAuthors::className(), ['book_id' => 'id']);
+    }
     
     /**
      * @return \yii\db\ActiveQuery
