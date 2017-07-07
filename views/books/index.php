@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BooksSearch */
@@ -63,9 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo implode(", ", $authors_str);
                     ?>
                 </td>
-                <td><a href="/admin/book/update/<?php //echo $book['book_id'];  ?>" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></td>
-                <td><a href="/admin/book/delete/<?php //echo $book['book_id'];   ?>" title="Удалить"><i class="fa fa-times"></i></a></td>
+                <td><a href="/books/update/<?= $book['id'];  ?>" title="Редактировать"><i class="fa fa-pencil-square-o"></i></a></td>
+                <td><a href="/books/delete/<?= $book['id'];   ?>" title="Удалить"><i class="fa fa-times"></i></a></td>
             </tr>
         <?php endforeach; ?>
     </table>
+    
+    <?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>

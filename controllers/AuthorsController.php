@@ -8,6 +8,7 @@ use app\models\AuthorsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * AuthorsController implements the CRUD actions for Authors model.
@@ -43,11 +44,21 @@ class AuthorsController extends Controller
 //            'dataProvider' => $dataProvider,
 //        ]);
         
-        $authors = Authors::find()->with('books')->limit(100)->all();
         
-        //debug($authors);
+        $query = Authors::find();
+
+        $pagination = new Pagination([
+            'defaultPageSize' => 5,
+            'totalCount' => $query->count(),
+        ]);
+
+        $authors = $query->orderBy('author_name')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
         
-        return $this->render('index', compact('authors'));
+        
+        return $this->render('index', compact('authors', 'pagination'));
     }
 
     /**

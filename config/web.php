@@ -47,6 +47,7 @@ $config = [
             'rules' => [
 
                 'authors/update/<id:\d+>' => 'authors/update',
+                'books/update/<id:\d+>' => 'books/update',
                 '<action:home|about|contact|login>' => 'site/<action>',
                 
             ],

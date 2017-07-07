@@ -8,6 +8,7 @@ use app\models\BooksSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -43,9 +44,20 @@ class BooksController extends Controller
 //            'dataProvider' => $dataProvider,
 //        ]);
         
-        $books = Books::find()->with('authors')->limit(100)->all();
+        $query = Books::find();
+        
 
-        return $this->render('index', compact('books') );
+        $pagination = new Pagination([
+            'defaultPageSize' => 5,
+            'totalCount' => $query->count(),
+        ]);
+
+        $books = $query->orderBy('book_title')
+                ->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+
+        return $this->render('index', compact('books', 'pagination') );
     }
 
     /**
