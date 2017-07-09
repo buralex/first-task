@@ -18,8 +18,8 @@
         "yiisoft/yii2": "~2.0.5",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "yii2tech/ar-linkmany": "*",
-        "rmrevin/yii2-fontawesome": "~2.17"
+        "rmrevin/yii2-fontawesome": "~2.17",
+        "nex/yii2-chosen": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
