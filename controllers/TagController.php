@@ -101,9 +101,22 @@ class TagController extends Controller
      */
     public function actionDelete($id)
     {
+        
+        try {
+            
         $this->findModel($id)->delete();
-
+        
         return $this->redirect(['index']);
+        
+        } catch (yii\db\IntegrityException $e) {
+            
+            debug($e->errorInfo);
+            
+            Yii::$app->session->setFlash('error', "You cannot delete this tag. Database restriction!");
+            
+            return $this->redirect(['index']);
+        }
+
     }
 
     /**

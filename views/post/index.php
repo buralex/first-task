@@ -19,9 +19,30 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            
+            //'tags',
+            
+                [
+                'attribute' => 'tags',
+                'value' => function ($data) {
+                    $tags = [];
+                    
+                    foreach ($data['tags'] as $tag) {
+                        $tags[] = $tag['title'];
+                        
+                    }
+        
+//                    debug(implode(", ", $tags));
+//                    die;
+                        //return $data->category->name;
+                        return implode(", ", $tags);
+                },
+                'format' => 'html'
+            ],
+            
             'id',
             'title',
             'alias',

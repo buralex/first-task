@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Post;
+use app\models\PostSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,11 +36,12 @@ class PostController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new PostSearch();
         $dataProvider = new ActiveDataProvider([
             'query' => Post::find(),
         ]);
 
-        return $this->render('index', compact('dataProvider'));
+        return $this->render('index', compact('dataProvider', 'searchModel'));
     }
 
     /**
