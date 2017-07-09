@@ -4,11 +4,11 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Books;
-use app\models\BooksSearch;
+use app\models\Authors;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\Pagination;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -36,28 +36,13 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BooksSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
-        
-        $query = Books::find();
-        
-
-        $pagination = new Pagination([
-            'defaultPageSize' => 5,
-            'totalCount' => $query->count(),
+        $dataProvider = new ActiveDataProvider([
+            'query' => Books::find(),
         ]);
 
-        $books = $query->orderBy('book_title')
-                ->offset($pagination->offset)
-                ->limit($pagination->limit)
-                ->all();
-
-        return $this->render('index', compact('books', 'pagination', 'dataProvider', 'searchModel') );
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -82,6 +67,15 @@ class BooksController extends Controller
         $model = new Books();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
+            
+//            $author = Authors::findOne(57);
+//            
+//            debug($author);
+//            die;
+//            $model->link('authors', $author);
+            
+            
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -89,6 +83,50 @@ class BooksController extends Controller
             ]);
         }
     }
+    
+        public function actionCreateee()
+    {
+        $model = new Books();
+
+        if (true) {
+            
+            debug('rrr');
+            
+            $book = new Books;
+            $book->book_title = 'new book';
+            $book->save();
+
+            $author = new Authors;
+            $author->author_name = 'fffffff';
+            $author->save();
+
+            //$book->link('authors', $author);
+            
+            
+//            $author = Authors::findOne(57);
+//            
+//            debug($author);
+//            die;
+//            $model->link('authors', $author);
+            
+            
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+    
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        //ниже ваш код
+        var_dump("ooooooooo");
+    
+    }
+    
 
     /**
      * Updates an existing Books model.
@@ -100,34 +138,12 @@ class BooksController extends Controller
     {
         $model = $this->findModel($id);
 
-        
-        $model = Books::find()
-                        ->with('authors')
-                        ->where(['id' => $id])
-                        ->one();
-//
-//        //debug(array_values($model['authors']));die;
-//        $authors = [];
-//        
-//        foreach ($model['authors'] as $author) {
-//            
-//            $authors[] = $author['author_name'];
-//        }
-//        
-//        //debug($authors);die;
-//        $authors_str = implode(", ", $authors);
-//        
-//        $model->$authors_str = $authors_str;
-        
-        
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            debug(Yii::$app->request->post());die;
-            
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('update', compact('model'));
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
     }
 

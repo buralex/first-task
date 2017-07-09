@@ -4,11 +4,10 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Authors;
-use app\models\AuthorsSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\Pagination;
 
 /**
  * AuthorsController implements the CRUD actions for Authors model.
@@ -36,29 +35,18 @@ class AuthorsController extends Controller
      */
     public function actionIndex()
     {
-//        $searchModel = new AuthorsSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
-        
-        
-        $query = Authors::find();
-
-        $pagination = new Pagination([
-            'defaultPageSize' => 5,
-            'totalCount' => $query->count(),
+        $dataProvider = new ActiveDataProvider([
+            'query' => Authors::find(),
         ]);
+        
+//        $aaa = Authors::findOne(57)->books;
+        
+//        debug($aaa);
+//        die;
 
-        $authors = $query->orderBy('author_name')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        
-        
-        return $this->render('index', compact('authors', 'pagination'));
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

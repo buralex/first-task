@@ -1,0 +1,14 @@
+{
+  "name": "some-name",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "some_author",
+  "contributors": [],
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-env": "^1.1.8"
+  },
+  "scripts":{
+    "ES6 -> ES5": "babel web/js/es6 --watch --presets babel-preset-env --out-dir web/js"
+  }
+}
