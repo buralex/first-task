@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 /**
  * Class ManyHasManyBehavior
  * @package common\components\behaviors
+ * http://fancode.ru/post/yii2-behaviors-many-to-many
+ * http://www.yiiframework.com/wiki/851/yii2-gridview-sorting-and-searching-with-a-junction-table-column-many-to-many-relationship/
  *
  * Usage:
  * 1. In your model, add the behavior and configure it:
@@ -86,7 +88,8 @@ class ManyHasManyBehavior extends \yii\base\Behavior
         foreach ($this->relations as $relationName => $attributeName) {
  
             $relation = $this->owner->getRelation($relationName);
-            $relationModel = new $relation->modelClass();
+            
+            //$relationModel = new $relation->modelClass();
  
             // If the relation is many-to-many
             if (!empty($relation->via) && $relation->multiple) {
