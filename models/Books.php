@@ -46,6 +46,7 @@ class Books extends \yii\db\ActiveRecord
     {
         return [
             [['book_title'], 'string', 'max' => 255],
+            [['book_title'], 'unique'],
             [['author_list'], 'safe']
         ];
     }

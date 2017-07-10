@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Books;
+use app\models\BooksAuthors;
+use yii\db\Query;
 
 /**
  * BooksSearch represents the model behind the search form about `app\models\Books`.
@@ -49,22 +51,26 @@ class BooksSearch extends Books
     public function search($params)
     {
         $query = Books::find()->innerJoinWith('authors', true); // relation 'authors'
+        
+        $subQuery = new Query();
+        $subQuery->select('COUNT(author_id) AS author_quantity, book_id')
+                ->from('books_authors')
+        ->groupBy('book_id');
+        
+        
+        $query->leftJoin(['authors_sum' => $subQuery], 'authors_sum.book_id = books.id'); //authors_sum - alias table
 
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['attributes' => ['id', 'book_title', 'author_name', '$author_quantity']],
+            'sort' => ['attributes' => ['id', 'book_title', 'author_name', 'author_quantity']],
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
         
-//        $dataProvider->sort->attributes['authors'] = [
-//            'asc' => ['authors.author_name' => SORT_ASC],
-//            'desc' => ['authors.author_name' => SORT_DESC],
-//        ];
 
         $this->load($params);
 
@@ -76,12 +82,14 @@ class BooksSearch extends Books
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'books.id' => $this->id,
+            'authors_sum.author_quantity' => $this->author_quantity,
+            
         ]);
 
         $query->andFilterWhere(['like', 'book_title', $this->book_title])
                 ->andFilterWhere(['like', 'author_name', $this->author_name]);
-                //->andFilterWhere(['>', 3, $this->author_quantity]);
+                //->andFilterWhere(['like', 'authors_sum.book_id', $this->author_quantity]);
 
         return $dataProvider;
     }

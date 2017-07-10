@@ -31,6 +31,7 @@ class Authors extends \yii\db\ActiveRecord
         return [
             [['author_name'], 'required'],
             [['author_name'], 'string', 'max' => 255],
+            [['author_name'], 'unique'],
         ];
     }
 

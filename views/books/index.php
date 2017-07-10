@@ -43,7 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'attribute' => 'author_quantity',
                 'value' => function ($model) {
-        
+//                    debug($model);
+//                    die;
                     return count($model['authors']);
                 },
                 'format' => 'html'
