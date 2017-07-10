@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @package common\components\behaviors
  * http://fancode.ru/post/yii2-behaviors-many-to-many
  * http://www.yiiframework.com/wiki/851/yii2-gridview-sorting-and-searching-with-a-junction-table-column-many-to-many-relationship/
+ * https://stackoverflow.com/questions/39743082/yii2-gridview-filter-a-count-sum-on-a-second-table-column
  *
  * Usage:
  * 1. In your model, add the behavior and configure it:

@@ -16,9 +16,10 @@ class BooksSearch extends Books
 {
     /**
      * @inheritdoc
-     * search string - author name
+     * search string - author name 
      */
     public $author_name;
+    
     public $author_quantity;
     
     /**
@@ -89,7 +90,6 @@ class BooksSearch extends Books
 
         $query->andFilterWhere(['like', 'book_title', $this->book_title])
                 ->andFilterWhere(['like', 'author_name', $this->author_name]);
-                //->andFilterWhere(['like', 'authors_sum.book_id', $this->author_quantity]);
 
         return $dataProvider;
     }

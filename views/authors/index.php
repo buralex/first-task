@@ -26,8 +26,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'author_name',
+            [
+                'label' => 'Books',
+                'format' => 'ntext',
+                'attribute'=>'book_title',
+                'value' => function($model) {
+                    foreach ($model->books as $book) {
+                        $book_titles[] = $book->book_title;
+                    }
+                    return implode(", ", $book_titles);
+                },
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['style' => 'width:80px'],
+            ],
         ],
     ]); ?>
 </div>

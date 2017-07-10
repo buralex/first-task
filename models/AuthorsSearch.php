@@ -12,6 +12,13 @@ use app\models\Authors;
  */
 class AuthorsSearch extends Authors
 {
+    
+    /**
+     * @inheritdoc
+     * search string - book title 
+     */
+    public $book_title;
+    
     /**
      * @inheritdoc
      */
@@ -19,7 +26,7 @@ class AuthorsSearch extends Authors
     {
         return [
             [['id'], 'integer'],
-            [['author_name'], 'safe'],
+            [['author_name', 'book_title'], 'safe'],
         ];
     }
 
@@ -41,12 +48,16 @@ class AuthorsSearch extends Authors
      */
     public function search($params)
     {
-        $query = Authors::find();
+        $query = Authors::find()->innerJoinWith('books', true); // relation 'books';
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['attributes' => ['id', 'author_name', 'book_title']],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         $this->load($params);
@@ -62,7 +73,8 @@ class AuthorsSearch extends Authors
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'author_name', $this->author_name]);
+        $query->andFilterWhere(['like', 'author_name', $this->author_name])
+                ->andFilterWhere(['like', 'book_title', $this->book_title]);
 
         return $dataProvider;
     }

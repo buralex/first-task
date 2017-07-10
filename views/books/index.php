@@ -43,14 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'attribute' => 'author_quantity',
                 'value' => function ($model) {
-//                    debug($model);
-//                    die;
                     return count($model['authors']);
                 },
                 'format' => 'html'
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'headerOptions' => ['style' => 'width:80px'],
+            ],
         ],
     ]); ?>
 </div>
