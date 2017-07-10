@@ -44,18 +44,18 @@ AppAsset::register($this);
             ['label' => 'Books', 'url' => ['/books']],
             ['label' => 'Authors', 'url' => ['/authors']],
             
-//            Yii::$app->user->isGuest ? (
-//                ['label' => 'Login', 'url' => ['/login']]
-//            ) : (
-//                '<li>'
-//                . Html::beginForm(['/site/logout'], 'post')
-//                . Html::submitButton(
-//                    'Logout (' . Yii::$app->user->identity->username . ')',
-//                    ['class' => 'btn btn-link logout']
-//                )
-//                . Html::endForm()
-//                . '</li>'
-//            )
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Login', 'url' => ['/login']]
+            ) : (
+                '<li>'
+                . Html::beginForm(['/site/logout'], 'post')
+                . Html::submitButton(
+                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+            )
         ],
     ]);
     NavBar::end();

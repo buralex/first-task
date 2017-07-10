@@ -62,21 +62,12 @@ class Books extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBooksAuthors()
-    {
-        return $this->hasMany(BooksAuthors::className(), ['book_id' => 'id']);
-    }
-    
-    
 //    /**
-//     * 
+//     * @return \yii\db\ActiveQuery
 //     */
-//    public function getAuthorsQuantity()
+//    public function getBooksAuthors()
 //    {
-//        return $this->authors;
+//        return $this->hasMany(BooksAuthors::className(), ['book_id' => 'id']);
 //    }
     
 
