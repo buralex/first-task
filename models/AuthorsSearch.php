@@ -48,7 +48,7 @@ class AuthorsSearch extends Authors
      */
     public function search($params)
     {
-        $query = Authors::find()->innerJoinWith('books', true); // relation 'books';
+        $query = Authors::find()->innerJoinWith(['books'])->groupBy(['authors.id']); // relation 'books';
 
         // add conditions that should always apply here
 
