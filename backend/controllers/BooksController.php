@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 
 /**
  * BooksController implements the CRUD actions for Books model.
@@ -74,14 +75,20 @@ class BooksController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Books();
+        if( Yii::$app->user->can('create-item') ) {
+            
+            $model = new Books();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                            'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
+            return $this->redirect(['index']);
         }
     }
 
@@ -93,14 +100,21 @@ class BooksController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if( Yii::$app->user->can('update-item') ) {
+            
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+            
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
+            return $this->redirect(['index']);
         }
     }
 
@@ -112,9 +126,17 @@ class BooksController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if( Yii::$app->user->can('delete-item') ) {
+            
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+            
+        } else {
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
+            return $this->redirect(['index']);
+        }
+        
     }
 
     /**

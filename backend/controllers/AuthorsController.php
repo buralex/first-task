@@ -74,15 +74,21 @@ class AuthorsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Authors();
-        
+        if (Yii::$app->user->can('create-item')) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model = new Authors();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                            'model' => $model,
+                ]);
+            }
+            
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
+            return $this->redirect(['index']);
         }
     }
 
@@ -94,14 +100,21 @@ class AuthorsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if (Yii::$app->user->can('update-item')) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model = $this->findModel($id);
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+            
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
+            return $this->redirect(['index']);
         }
     }
 
@@ -113,17 +126,24 @@ class AuthorsController extends Controller
      */
     public function actionDelete($id)
     {
-        try {
+        if (Yii::$app->user->can('delete-item')) {
+
+            try {
+
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+
+            } catch (yii\db\IntegrityException $e) {
+
+                debug($e->errorInfo);
+
+                Yii::$app->session->setFlash('error', "You cannot delete this author. Database restriction!");
+
+                return $this->redirect(['index']);
+            }
             
-            $this->findModel($id)->delete();
-            return $this->redirect(['index']);
-        
-        } catch (yii\db\IntegrityException $e) {
-            
-            debug($e->errorInfo);
-            
-            Yii::$app->session->setFlash('error', "You cannot delete this author. Database restriction!");
-            
+        } else {
+            Yii::$app->session->setFlash('error', "You cannot do this action!");
             return $this->redirect(['index']);
         }
     }
