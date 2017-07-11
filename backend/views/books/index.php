@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'ntext',
                 'attribute'=>'author_name',
                 'value' => function($model) {
+        
+                    $author_names = [];
                     foreach ($model->authors as $author) {
                         $author_names[] = $author->author_name;
                     }

@@ -52,8 +52,7 @@ class BooksSearch extends Books
      */
     public function search($params)
     {
-        $query = Books::find()->innerJoinWith(['authors'])->groupBy(['books.id']); // relation 'authors'
-        
+        $query = Books::find()->joinWith(['authors'])->groupBy(['books.id']); // relation 'authors'
         
         $subQuery = new Query();
         $subQuery->select('COUNT(author_id) AS author_quantity, book_id')

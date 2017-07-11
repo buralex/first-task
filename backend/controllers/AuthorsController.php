@@ -8,6 +8,7 @@ use backend\models\AuthorsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * AuthorsController implements the CRUD actions for Authors model.
@@ -20,6 +21,16 @@ class AuthorsController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::classname(),
+                'only' => ['index', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => 'true',
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -64,6 +75,7 @@ class AuthorsController extends Controller
     public function actionCreate()
     {
         $model = new Authors();
+        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -101,9 +113,19 @@ class AuthorsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        try {
+            
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        
+        } catch (yii\db\IntegrityException $e) {
+            
+            debug($e->errorInfo);
+            
+            Yii::$app->session->setFlash('error', "You cannot delete this author. Database restriction!");
+            
+            return $this->redirect(['index']);
+        }
     }
 
     /**

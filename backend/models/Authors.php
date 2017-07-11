@@ -31,6 +31,7 @@ class Authors extends \yii\db\ActiveRecord
         return [
             [['author_name'], 'required'],
             [['author_name'], 'string', 'max' => 255],
+            [['author_name'], 'unique'],
         ];
     }
 
@@ -58,6 +59,7 @@ class Authors extends \yii\db\ActiveRecord
      */
     public function getBooks()
     {
-        return $this->hasMany(Books::className(), ['id' => 'book_id'])->viaTable('{{%books_authors}}', ['author_id' => 'id']);
+        return $this->hasMany(Books::className(), ['id' => 'book_id'])
+                ->viaTable('{{%books_authors}}', ['author_id' => 'id']);
     }
 }

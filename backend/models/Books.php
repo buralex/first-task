@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use common\components\behaviors\ManyHasManyBehavior;
 
 /**
  * This is the model class for table "{{%books}}".
@@ -23,7 +24,7 @@ class Books extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => \common\components\behaviors\ManyHasManyBehavior::className(),
+                'class' => ManyHasManyBehavior::className(),
                 'relations' => [
                     'authors' => 'author_list',                   
                 ],
@@ -75,6 +76,7 @@ class Books extends \yii\db\ActiveRecord
      */
     public function getAuthors()
     {
-        return $this->hasMany(Authors::className(), ['id' => 'author_id'])->viaTable('{{%books_authors}}', ['book_id' => 'id']);
+        return $this->hasMany(Authors::className(), ['id' => 'author_id'])
+                ->viaTable('{{%books_authors}}', ['book_id' => 'id']);
     }
 }

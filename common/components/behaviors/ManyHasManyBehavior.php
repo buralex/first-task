@@ -20,7 +20,7 @@ use yii\helpers\ArrayHelper;
  * {
  *     return [
  *         [
- *             'class' =--> \common\components\behaviors\ManyHasManyBehavior::className(),
+ *             'class' => \common\components\behaviors\ManyHasManyBehavior::className(),
  *             'relations' => [
  *                  'tags' => 'tag_list',                  
  *              ],

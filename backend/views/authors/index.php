@@ -18,6 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Authors', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    
+    <?php 
+//    debug($dataProvider->query->all());
+//                    die;
+                    ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -31,6 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'ntext',
                 'attribute'=>'book_title',
                 'value' => function($model) {
+
+                    $book_titles = [];
                     foreach ($model->books as $book) {
                         $book_titles[] = $book->book_title;
                     }
