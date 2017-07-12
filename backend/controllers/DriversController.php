@@ -47,7 +47,7 @@ class DriversController extends Controller
             
             $params = [':orig_lat' => floatval($_POST['orig_lat']), ':orig_lng' => floatval($_POST['orig_lng']), ':search_rad' => floatval($_POST['search_rad'])];
             
-            $command = $connection->createCommand("SELECT id, ( 3959 * acos( cos( radians( :orig_lat ) )"
+            $command = $connection->createCommand("SELECT id, lat, lng, ( 3959 * acos( cos( radians( :orig_lat ) )"
                     . " * cos( radians( lat ) ) * cos( radians( lng ) - radians( :orig_lng ) ) + sin( radians( :orig_lat ) )"
                     . " * sin( radians( lat ) ) ) ) AS distance FROM drivers HAVING distance < :search_rad ORDER BY distance LIMIT 10;", $params );
 
@@ -75,28 +75,17 @@ class DriversController extends Controller
      * @param object $model
      * @return mixed
      */
-    public function actionNearest($orig_lat, $orig_lng, $search_rad)
+    public function actionStoreLocator()
     {
-            //echo 'dd';
-//            debug($orig_lat);debug($search_rad);die;
             
-  
-//            $connection = Yii::$app->getDb();
-//            
-//            $params = [':orig_lat' => intval($orig_lat), ':orig_lng' => intval($orig_lng), ':search_rad' => intval($search_rad)];
-//            
-//            $command = $connection->createCommand("SELECT id, ( 3959 * acos( cos( radians( :orig_lat ) )"
-//                    . " * cos( radians( lat ) ) * cos( radians( lng ) - radians( :orig_lng ) ) + sin( radians( :orig_lat ) )"
-//                    . " * sin( radians( lat ) ) ) ) AS distance FROM drivers HAVING distance < :search_rad ORDER BY distance LIMIT 10;", $params );
-//
-//            $result = $command->queryAll();
-//            
-//            debug($result);
-//
-//            //debug($result);
-//
-//            $drivers = json_encode($result);
-//            echo $drivers;
+        if ( Yii::$app->request->isAjax ) {
+
+echo 'dd';die;
+
+        } else {
+
+            return $this->render('store-locator');
+        }
 
     }
 

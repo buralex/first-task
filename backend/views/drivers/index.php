@@ -34,88 +34,108 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <button class="" id = "btn">send</button>
     
-<div id="map"></div>
+    <div id="right-panel">
+      <div id="inputs">
+        <pre>
+var origin1 = {lat: 55.930, lng: -3.118};
+var origin2 = 'Greenwich, England';
+var destinationA = 'Stockholm, Sweden';
+var destinationB = {lat: 50.087, lng: 14.421};
+        </pre>
+      </div>
+      <div>
+        <strong>Results</strong>
+      </div>
+      <div id="output"></div>
+    </div>
+    <div id="map"></div>
     <script>
-        
-        
-
-        
-        
-        
-//function showNearest() {
-//    var xhttp = new XMLHttpRequest();
-//    //var dataList = document.querySelector(params.dataList);
-//    //var input = document.querySelector(params.input);
-//
-//        xhttp.open('GET', 'drivers/nearest', true);
-//
-//        xhttp.onload = function(oEvent) {
-//            if (xhttp.status == 200) {
-//
-//            console.log(this.responseText);
-//
-//            } else {
-//                throw new Error("Error! not sent!");
-//            }
-//        };
-//        xhttp.send();
-//}
-//
-//showNearest();
-
-
-
-
-        
-        
-        
-  /*      
-
       function initMap() {
-          
-        var myLatLng = {lat: -25.363, lng: 131.044};
-        
-          var locations = [
-          ['Stadtbibliothek Zanklhof', 47.06976, 15.43154, 1],
-          ['Stadtbibliothek dieMediathek', 47.06975, 15.43116, 2],
-          ['Stadtbibliothek Gösting', 47.09399, 15.40548, 3],
-          ['Stadtbibliothek Graz West', 47.06993, 15.40727, 4],
-          ['Stadtbibliothek Graz Ost', 47.06934, 15.45888, 5],
-          ['Stadtbibliothek Graz Süd', 47.04572, 15.43234, 6],
-          ['Stadtbibliothek Graz Nord', 47.08350, 15.43212, 7],
-          ['Stadtbibliothek Andritz', 47.10280, 15.42137, 8]
-        ];
+        var bounds = new google.maps.LatLngBounds;
+        var markersArray = [];
 
-//        var map = new google.maps.Map(document.getElementById('map'), {
-//          zoom: 4,
-//          center: myLatLng
-//        });
+        var origin1 = {lat: 55.93, lng: -3.118};
+        var origin2 = 'Greenwich, England';
+        var destinationA = 'Stockholm, Sweden';
+        var destinationB = {lat: 50.087, lng: 14.421};
 
+        var destinationIcon = 'https://chart.googleapis.com/chart?' +
+            'chst=d_map_pin_letter&chld=D|FF0000|000000';
+        var originIcon = 'https://chart.googleapis.com/chart?' +
+            'chst=d_map_pin_letter&chld=O|FFFF00|000000';
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 13,
-          center: new google.maps.LatLng(47.071876, 15.441456),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          center: {lat: 55.53, lng: 9.4},
+          zoom: 10
         });
-        
-        //console.log(map);
-        
-        var marker, i;
+        var geocoder = new google.maps.Geocoder;
 
-        for (i = 0; i < locations.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-            map: map
-          });
+        var service = new google.maps.DistanceMatrixService;
+        service.getDistanceMatrix({
+          origins: [origin1, origin2],
+          destinations: [destinationA, destinationB],
+          travelMode: 'DRIVING',
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        }, function(response, status) {
+          if (status !== 'OK') {
+            alert('Error was: ' + status);
+          } else {
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+            deleteMarkers(markersArray);
+
+            var showGeocodedAddressOnMap = function(asDestination) {
+              var icon = asDestination ? destinationIcon : originIcon;
+              return function(results, status) {
+                if (status === 'OK') {
+                  map.fitBounds(bounds.extend(results[0].geometry.location));
+                  markersArray.push(new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    icon: icon
+                  }));
+                } else {
+                  alert('Geocode was not successful due to: ' + status);
+                }
+              };
+            };
+
+            for (var i = 0; i < originList.length; i++) {
+              var results = response.rows[i].elements;
+              geocoder.geocode({'address': originList[i]},
+                  showGeocodedAddressOnMap(false));
+              for (var j = 0; j < results.length; j++) {
+                geocoder.geocode({'address': destinationList[j]},
+                    showGeocodedAddressOnMap(true));
+                outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
+                    ': ' + results[j].distance.text + ' in ' +
+                    results[j].duration.text + '<br>';
+              }
+            }
+          }
+        });
+      }
+
+      function deleteMarkers(markersArray) {
+        for (var i = 0; i < markersArray.length; i++) {
+          markersArray[i].setMap(null);
         }
-        
-
+        markersArray = [];
       }
       
-      */
+      
+      
     </script>
-<!--    <script async defer
+    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk&callback=initMap">
-    </script>-->
+    </script>
+    
+    
+
+    
     
     
     <?php 
