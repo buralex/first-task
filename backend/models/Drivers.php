@@ -2,54 +2,19 @@
 
 namespace backend\models;
 
-use Yii;
+use yii\base\Model;
 
-/**
- * This is the model class for table "{{%drivers}}".
- *
- * @property integer $id
- * @property string $name
- * @property string $address
- * @property double $lat
- * @property double $lng
- */
-class Drivers extends \yii\db\ActiveRecord
+class Drivers extends Model
 {
-    public $latitude;
-    
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%drivers}}';
-    }
+    public $orig_lat;
+    public $orig_lng;
+    public $search_rad;
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['name', 'address', 'lat', 'lng'], 'required'],
-            [['lat', 'lng'], 'number'],
-            [['name'], 'string', 'max' => 60],
-            [['address'], 'string', 'max' => 80],
-            [['latitude'], 'safe'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'address' => 'Address',
-            'lat' => 'Lat',
-            'lng' => 'Lng',
+            //[['name', 'email'], 'required'],
+            [['orig_lat', 'orig_lng', 'search_rad'], 'safe'],
         ];
     }
 }
