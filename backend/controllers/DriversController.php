@@ -43,12 +43,9 @@ class DriversController extends Controller
        
         if ( Yii::$app->request->isAjax ) {
             
-            debug('$_POST');
-            die;
-            
             $orig_lat = floatval($_POST['orig_lat']);
             $orig_lng = floatval($_POST['orig_lng']);
-            $search_rad = floatval($_POST['search_rad']);
+            $search_rad = floatval($_POST['search_rad']);            
             
             $drivers = [];
             
@@ -64,9 +61,7 @@ class DriversController extends Controller
 
             $drivers[] = $command->queryAll();
             
-            
-            
-            $drivers = json_encode($result);
+            $drivers = json_encode($drivers);
 
             echo $drivers;
 
