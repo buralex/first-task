@@ -23,17 +23,36 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     
     
- <form action="" id = "coordinates">
-  Lat: <input type="text" name="orig_lat" value=""><br>
-  Lng: <input type="text" name="orig_lng" value=""><br>
+    <form action="" method="" id="coordinates">
+  Lat: <input type="text" name="orig_lat" value="27"><br>
+  Lng: <input type="text" name="orig_lng" value="-110"><br>
   Search radius: <br>
-  <input type="text" name="search_rad" value=""><br>
+  <input type="text" name="search_rad" value="1000">
+  <br><br>
+  <input type="submit" class="" value="send">
 
 </form> 
 <br>
 
-<button class="" id = "btn">send</button>
-    
+<div id="demo">
+<h2>The XMLHttpRequest Object</h2>
+<button type="button" onclick="loadDoc()">Change Content</button>
+</div>
+<script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+    }
+  };
+  xhttp.open("POST", "drivers", true);
+  xhttp.send();
+}
+</script>
+
+<!--<button class="" id = "btn">send</button>-->
+ 
     <div id="right-panel">
       <div id="inputs">
         <pre>
@@ -53,11 +72,21 @@ var destinationB = {lat: 50.087, lng: 14.421};
       function initMap() {
         var bounds = new google.maps.LatLngBounds;
         var markersArray = [];
+        
 
-        var origin1 = {lat: 55.93, lng: -3.118};
-        var origin2 = 'Greenwich, England';
-        var destinationA = 'Stockholm, Sweden';
-        var destinationB = {lat: 50.087, lng: 14.421};
+        
+        
+        var destinations = [
+            {lat: 47.911529, lng: -121.606417},
+            {lat: 48.072560, lng: -121.689606},
+            {lat: 48.092397, lng: -122.576537},
+            {lat: 48.950253, lng: -122.459792},
+        ];
+
+        var origin1 = {lat: 37.99616268, lng: -91.93359375};
+        //var origin2 = 'Greenwich, England';
+        //var destinationA = 'Stockholm, Sweden';
+        var destinationB = {lat: 53.61857936, lng: -113.53271484};
 
         var destinationIcon = 'https://chart.googleapis.com/chart?' +
             'chst=d_map_pin_letter&chld=D|FF0000|000000';
@@ -71,8 +100,8 @@ var destinationB = {lat: 50.087, lng: 14.421};
 
         var service = new google.maps.DistanceMatrixService;
         service.getDistanceMatrix({
-          origins: [origin1, origin2],
-          destinations: [destinationA, destinationB],
+          origins: [origin1],
+          destinations: destinations,
           travelMode: 'DRIVING',
           unitSystem: google.maps.UnitSystem.METRIC,
           avoidHighways: false,
@@ -102,16 +131,32 @@ var destinationB = {lat: 50.087, lng: 14.421};
                 }
               };
             };
+            console.log( google.maps.UnitSystem );
+            //console.log(originList);
+            
 
             for (var i = 0; i < originList.length; i++) {
+                
               var results = response.rows[i].elements;
+              
+              
+              
+              
+              
               geocoder.geocode({'address': originList[i]},
                   showGeocodedAddressOnMap(false));
+                  
               for (var j = 0; j < results.length; j++) {
+                  
+                  console.log(destinationList[j]);
+                  
                 geocoder.geocode({'address': destinationList[j]},
                     showGeocodedAddressOnMap(true));
+                    
+                    console.log(results[j].duration);
+                    
                 outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
-                    ': ' + results[j].distance.text + ' in ' +
+                    ': ' + results[j].distance.value + ' in ' +
                     results[j].duration.text + '<br>';
               }
             }
@@ -125,9 +170,6 @@ var destinationB = {lat: 50.087, lng: 14.421};
         }
         markersArray = [];
       }
-      
-      
-      
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk&callback=initMap">
