@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         Lat: <input type="text" name="orig_lat" value="27" autofocus><br>
         Lng: <input type="text" name="orig_lng" value="-110"><br>
         Search radius: <br>
-        <input type="text" name="search_rad" value="1000">
+        <input type="text" name="search_rad" value="10000">
         <br><br>
         <input type="submit" class="" value="send">
 

@@ -49,7 +49,7 @@ class DriversController extends Controller
             
             $drivers = [];
             
-            $drivers[] = ['orig_lar' => $orig_lat, 'orig_lng' => $orig_lng];
+            $drivers[] = ['orig_lat' => $orig_lat, 'orig_lng' => $orig_lng];
 
             $connection = Yii::$app->getDb();
             

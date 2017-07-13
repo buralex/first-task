@@ -16,8 +16,9 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
 
+        
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk',
         'js/drivers.js',
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk&callback=initMap'
         
     ];
     public $depends = [
