@@ -41,10 +41,12 @@ document.querySelector("#coordinates").addEventListener("submit", function (e) {
 });
 
 
-function initMap() {
+function initMap(drivers) {
 
     var bounds = new google.maps.LatLngBounds;
     var markersArray = [];
+    
+    console.log( drivers );
 
 
 
@@ -72,9 +74,12 @@ function initMap() {
     var geocoder = new google.maps.Geocoder;
 
     var service = new google.maps.DistanceMatrixService;
-    service.getDistanceMatrix({
-        origins: [origin1],
-        destinations: destinations,
+    
+    for ( var x = 0; x < drivers[1].length; x++ ) {
+        
+            service.getDistanceMatrix({
+        origins: [{ lat: parseFloat(drivers[0].orig_lat), lng: parseFloat(drivers[0].orig_lng) }],
+        destinations: [{ lat: parseFloat(drivers[1][x].lat), lng: parseFloat(drivers[1][x].lng) }],
         travelMode: 'DRIVING',
         unitSystem: google.maps.UnitSystem.METRIC,
         avoidHighways: false,
@@ -104,7 +109,7 @@ function initMap() {
 //                    }
 //                };
 //            };
-            console.log(google.maps.UnitSystem);
+            //console.log(google.maps.UnitSystem);
             //console.log(originList);
 
 
@@ -121,20 +126,25 @@ function initMap() {
 
                 for (var j = 0; j < results.length; j++) {
 
-                    console.log(destinationList[j]);
+                    //console.log(destinationList[j]);
 
 //                    geocoder.geocode({'address': destinationList[j]},
 //                            showGeocodedAddressOnMap(true));
 
-                    console.log(results[j].duration);
+                    //console.log(results[j].duration);
 
                     outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
-                            ': ' + results[j].distance.value + ' in ' +
+                            ': ' + results[j].distance.text + ' in ' +
                             results[j].duration.text + '<br>';
                 }
             }
         }
     });
+        
+    }
+    
+    
+
 }
 
 //function deleteMarkers(markersArray) {
