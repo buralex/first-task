@@ -31,12 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <input type="text" name="search_rad" value="10000">
         <br><br>
         <input type="submit" class="" value="send">
+        
 
     </form> 
 <br>
 
- 
-    <div id="right-panel">
+
 <!--      <div id="inputs">
         <pre>
 var origin1 = {lat: 55.930, lng: -3.118};
