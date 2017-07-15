@@ -5,6 +5,50 @@
 
 'use strict';
 
+/*-----------------------------------------------
+ *              debounce and throttle
+ * ----------------------------------------------*/
+
+Function.prototype.debounce = function (milliseconds, context) {
+    var baseFunction = this,
+        timer = null,
+        wait = milliseconds;
+
+    return function () {
+        var self = context || this,
+            args = arguments;
+
+        function complete() {
+            baseFunction.apply(self, args);
+            timer = null;
+        }
+
+        if (timer) {
+            clearTimeout(timer);
+        }
+
+        timer = setTimeout(complete, wait);
+    };
+};
+
+Function.prototype.throttle = function (milliseconds, context) {
+    var baseFunction = this,
+        lastEventTimestamp = null,
+        limit = milliseconds;
+
+    return function () {
+        var self = context || this,
+            args = arguments,
+            now = Date.now();
+
+        if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
+            lastEventTimestamp = now;
+            baseFunction.apply(self, args);
+        }
+    };
+};
+
+
 /*----------------------------------------------------------
  * NEAREST DRIVERS
  *   gets origin coordinates from user and output json with nearest drivers
@@ -13,7 +57,8 @@
 
 
 document.querySelector("#coordinates").addEventListener("submit", function (e) {
-
+    e.preventDefault();
+    
     var fd = new FormData(document.querySelector("#coordinates"));
     //console.log(fd);
 
@@ -37,7 +82,16 @@ document.querySelector("#coordinates").addEventListener("submit", function (e) {
             throw new Error('err!!!');
         }
     });
-    e.preventDefault();
+    
+    var but = document.querySelector('#coordinates [type="submit"]');
+    but.disabled = true;
+    but.classList.add('disabled');
+    
+    setTimeout(function(){
+        but.disabled = false;
+        but.classList.remove('disabled');
+    }, 15000);
+
 });
 
 

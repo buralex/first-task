@@ -57,7 +57,8 @@ class DriversController extends Controller
             
             $command = $connection->createCommand("SELECT id, lat, lng, ( 3959 * acos( cos( radians( :orig_lat ) )"
                     . " * cos( radians( lat ) ) * cos( radians( lng ) - radians( :orig_lng ) ) + sin( radians( :orig_lat ) )"
-                    . " * sin( radians( lat ) ) ) ) AS distance FROM drivers HAVING distance < :search_rad ORDER BY distance LIMIT 10;", $params );
+                    . " * sin( radians( lat ) ) ) ) AS distance FROM drivers"
+                    . " HAVING distance < :search_rad ORDER BY distance LIMIT 10;", $params );
 
             $drivers[] = $command->queryAll();
             

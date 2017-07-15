@@ -4,10 +4,12 @@ body {
 }
 
 .wrap {
+    height:1px;
     min-height: 100%;
-    height: auto;
+    /*height: auto;*/
     margin: 0 auto -60px;
     padding: 0 0 60px;
+    position: relative;
 }
 
 .wrap > .container {
@@ -118,11 +120,15 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
-
+/*---------- map --------------*/
 #map {
-    
     height: 500px;
+    height: 50vh;
 
+}
+
+#coordinates [type="submit"].disabled {
+    color: red;
 }
 
 
