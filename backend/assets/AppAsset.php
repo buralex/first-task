@@ -16,8 +16,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
 
-        
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk',
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk&libraries=places',
         'js/drivers.js',
         
     ];

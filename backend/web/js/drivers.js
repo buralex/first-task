@@ -5,55 +5,13 @@
 
 'use strict';
 
-/*-----------------------------------------------
- *              debounce and throttle
- * ----------------------------------------------*/
-
-Function.prototype.debounce = function (milliseconds, context) {
-    var baseFunction = this,
-        timer = null,
-        wait = milliseconds;
-
-    return function () {
-        var self = context || this,
-            args = arguments;
-
-        function complete() {
-            baseFunction.apply(self, args);
-            timer = null;
-        }
-
-        if (timer) {
-            clearTimeout(timer);
-        }
-
-        timer = setTimeout(complete, wait);
-    };
-};
-
-Function.prototype.throttle = function (milliseconds, context) {
-    var baseFunction = this,
-        lastEventTimestamp = null,
-        limit = milliseconds;
-
-    return function () {
-        var self = context || this,
-            args = arguments,
-            now = Date.now();
-
-        if (!lastEventTimestamp || now - lastEventTimestamp >= limit) {
-            lastEventTimestamp = now;
-            baseFunction.apply(self, args);
-        }
-    };
-};
-
 
 /*----------------------------------------------------------
  * NEAREST DRIVERS
  *   gets origin coordinates from user and output json with nearest drivers
  * ---------------------------------------------------------*/
 
+var map;
 
 
 document.querySelector("#coordinates").addEventListener("submit", function (e) {
@@ -69,7 +27,7 @@ document.querySelector("#coordinates").addEventListener("submit", function (e) {
 
             var driversParsed = JSON.parse(res);
 
-            initMap(driversParsed);
+            calcRoadDist(driversParsed);
 
             //console.log(  );
 
@@ -83,23 +41,131 @@ document.querySelector("#coordinates").addEventListener("submit", function (e) {
         }
     });
     
+    /*--------- delay because of 'OVER_QUERY_LIMIT' ----------------*/
     var but = document.querySelector('#coordinates [type="submit"]');
     but.disabled = true;
     but.classList.add('disabled');
+    but.value = 'wait 15 sec ...';
     
     setTimeout(function(){
         but.disabled = false;
         but.classList.remove('disabled');
+        but.value = 'send';
     }, 15000);
+    /*--------- /delay because of 'OVER_QUERY_LIMIT' ----------------*/
 
 });
 
 
-function initMap(drivers) {
+
+
+function initMap() {
+    
+    map = new google.maps.Map(document.getElementById('map'), {
+        mapTypeControl: true,
+        center: {lat: 39.87601942, lng: -101.29394531},
+        zoom: 5
+    });
+    
+    
+    
+    
+    
+    
+    /**
+        * @constructor
+       */
+      function AutocompleteDirectionsHandler(map) {
+        this.map = map;
+        this.originPlaceId = null;
+        this.destinationPlaceId = null;
+        this.travelMode = 'DRIVING';
+        var originInput = document.getElementById('origin-input');
+        //var destinationInput = document.getElementById('destination-input');
+        //var modeSelector = document.getElementById('mode-selector');
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay.setMap(map);
+
+        var originAutocomplete = new google.maps.places.Autocomplete(
+            originInput, {placeIdOnly: true});
+        //var destinationAutocomplete = new google.maps.places.Autocomplete(
+        //    destinationInput, {placeIdOnly: true});
+
+//        this.setupClickListener('changemode-walking', 'WALKING');
+//        this.setupClickListener('changemode-transit', 'TRANSIT');
+//        this.setupClickListener('changemode-driving', 'DRIVING');
+
+        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        //this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+//        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+//        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+//        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+      }
+        AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
+        var me = this;
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          if (!place.place_id) {
+            window.alert("Please select an option from the dropdown list.");
+            return;
+          }
+          if (mode === 'ORIG') {
+            me.originPlaceId = place.place_id;
+          } else {
+            me.destinationPlaceId = place.place_id;
+          }
+          me.route();
+        });
+
+      };
+
+      AutocompleteDirectionsHandler.prototype.route = function() {
+          alert('dd');
+        if (!this.originPlaceId || !this.destinationPlaceId) {
+            
+          return;
+        }
+        var me = this;
+
+        this.directionsService.route({
+          origin: {'placeId': this.originPlaceId},
+          destination: {'placeId': this.destinationPlaceId},
+          travelMode: this.travelMode
+        }, function(response, status) {
+          if (status === 'OK') {
+            me.directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      };
+      
+      new AutocompleteDirectionsHandler(map);
+}
+
+initMap();
+
+
+    
+
+
+
+
+       
+      
+
+
+
+function calcRoadDist(drivers) {
+    
+    var mapLink = map;
     
     var driversRoad;
 
-    var bounds = new google.maps.LatLngBounds;
+    var bounds = new google.maps.LatLngBounds();
     var markersArray = [];
     
     console.log( drivers );
@@ -136,10 +202,7 @@ for ( var n = 0; n < drivers[1].length; n++ ) {
             'chst=d_map_pin_letter&chld=D|FF0000|000000';
     var originIcon = 'https://chart.googleapis.com/chart?' +
             'chst=d_map_pin_letter&chld=O|FFFF00|000000';
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 55.53, lng: 9.4},
-        zoom: 10
-    });
+    
     var geocoder = new google.maps.Geocoder;
 
     var service = new google.maps.DistanceMatrixService;

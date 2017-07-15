@@ -128,7 +128,7 @@ a.desc:after {
 }
 
 #coordinates [type="submit"].disabled {
-    color: red;
+    color: #a71f1f;
 }
 
 

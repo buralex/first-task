@@ -28,9 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
         Lat: <input type="text" name="orig_lat" value="37.99616268" autofocus><br>
         Lng: <input type="text" name="orig_lng" value="-91.93359375"><br>
         Search radius: <br>
-        <input type="text" name="search_rad" value="10000">
-        <br><br>
+        <input type="text" name="search_rad" value="10000"><br>
+        <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location"><br>
+        <br>
         <input type="submit" class="" value="send">
+        
         
 
     </form> 
@@ -51,11 +53,6 @@ var destinationB = {lat: 50.087, lng: 14.421};
       <div id="output"></div>
     </div>
     <div id="map"></div>
-    
- 
-
-    
-    
 
     
     
