@@ -48,8 +48,8 @@ class DriversController extends Controller
             die;
 
             $api_key = "AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk";
-            $orig_lat = floatval($_POST['orig_lat']);
-            $orig_lng = floatval($_POST['orig_lng']);
+//            $orig_lat = floatval($_POST['orig_lat']);
+//            $orig_lng = floatval($_POST['orig_lng']);
             $search_rad = floatval($_POST['search_rad']);
             $orig_text = $_POST['orig_text'];
             
@@ -74,7 +74,7 @@ class DriversController extends Controller
             $ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
             
             
-            $query = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=";
+            $query = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&language=en&origins={$orig_text_preg}&destinations=";
             
             
             

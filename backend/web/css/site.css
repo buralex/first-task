@@ -121,7 +121,7 @@ a.desc:after {
     outline: none;
 }
 
-/*---------- map --------------*/
+/*---------- Drivers and map --------------*/
 
 .icon-load {
     background:url(../img/loader.gif) no-repeat left top;
@@ -148,6 +148,10 @@ a.desc:after {
 
 #coordinates [type="submit"].disabled {
     color: #a71f1f;
+}
+
+.search-form__origin {
+    width: 100%;
 }
 
 
