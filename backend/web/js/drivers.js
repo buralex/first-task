@@ -13,48 +13,86 @@
 
 var map;
 
+document.querySelector("#coordinates").addEventListener("submit", function(e) {
 
-document.querySelector("#coordinates").addEventListener("submit", function (e) {
-    e.preventDefault();
-    
-    var fd = new FormData(document.querySelector("#coordinates"));
-    //console.log(fd);
+        document.querySelector('.icon-load').style.display = 'block';
 
-    $.ajax({
-        url: 'drivers',
-        data: fd,
-        success: function (res) {
+        var formData = new FormData(document.querySelector('#coordinates'));
+        
+        //formData.append('some_name', some_value);
 
-            var driversParsed = JSON.parse(res);
+        var xhttp = new XMLHttpRequest();
+        
+        //console.log( formData );
 
-            calcRoadDist(driversParsed);
+        xhttp.open("POST", "drivers", true);
 
-            //console.log(  );
+        xhttp.onload = function(oEvent) {
+            if (xhttp.status == 200) {
+                
+                //var jsonOptions = JSON.parse(this.responseText);
+                
+                console.log(this.responseText);
+                
+                document.querySelector('.icon-load').style.display = 'none';
 
-            //console.log(Array.isArray(jsonDrivers));
-        },
-        type: 'POST',
-        processData: false, // tell jQuery not to process the data
-        contentType: false, // tell jQuery not to set contentType
-        error: function () {
-            throw new Error('err!!!');
-        }
+            } else {
+                throw new Error("Error! ajax request not sent!");
+            }
+        };
+        
+        /*-- for sequrity in yii2 --*/
+        var token = $('meta[name=csrf-token]').attr("content");
+        xhttp.setRequestHeader('X-CSRF-Token', token);
+        xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        /*-- /for sequrity in yii2 --*/
+        
+        xhttp.send(formData);
+        e.preventDefault();
     });
-    
-    /*--------- delay because of 'OVER_QUERY_LIMIT' ----------------*/
-    var but = document.querySelector('#coordinates [type="submit"]');
-    but.disabled = true;
-    but.classList.add('disabled');
-    but.value = 'wait 15 sec ...';
-    
-    setTimeout(function(){
-        but.disabled = false;
-        but.classList.remove('disabled');
-        but.value = 'send';
-    }, 15000);
-    /*--------- /delay because of 'OVER_QUERY_LIMIT' ----------------*/
 
-});
+
+//document.querySelector("#coordinates").addEventListener("submit", function (e) {
+//    e.preventDefault();
+//    
+//    var fd = new FormData(document.querySelector("#coordinates"));
+//    //console.log(fd);
+//
+//    $.ajax({
+//        url: 'drivers',
+//        data: fd,
+//        success: function (res) {
+//
+//            //var driversParsed = JSON.parse(res);
+//
+//            //calcRoadDist(driversParsed);
+//
+//            console.log( res );
+//
+//            //console.log(Array.isArray(jsonDrivers));
+//        },
+//        type: 'POST',
+//        processData: false, // tell jQuery not to process the data
+//        contentType: false, // tell jQuery not to set contentType
+//        error: function () {
+//            throw new Error('err!!!');
+//        }
+//    });
+//    
+//    /*--------- delay because of 'OVER_QUERY_LIMIT' ----------------*/
+////    var but = document.querySelector('#coordinates [type="submit"]');
+////    but.disabled = true;
+////    but.classList.add('disabled');
+////    but.value = 'wait 15 sec ...';
+////    
+////    setTimeout(function(){
+////        but.disabled = false;
+////        but.classList.remove('disabled');
+////        but.value = 'send';
+////    }, 15000);
+//    /*--------- /delay because of 'OVER_QUERY_LIMIT' ----------------*/
+//
+//});
 
 
 
@@ -123,7 +161,7 @@ function initMap() {
       };
 
       AutocompleteDirectionsHandler.prototype.route = function() {
-          alert('dd');
+          //alert('dd');
         if (!this.originPlaceId || !this.destinationPlaceId) {
             
           return;

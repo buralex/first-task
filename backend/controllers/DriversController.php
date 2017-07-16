@@ -36,6 +36,7 @@ class DriversController extends Controller
      */
     public function actionIndex()
     {
+        
        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
        //header('Content-Type: application/json');
         
@@ -43,13 +44,22 @@ class DriversController extends Controller
        
         if ( Yii::$app->request->isAjax ) {
             
+            debug($_POST);
+            die;
+
+            $api_key = "AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk";
             $orig_lat = floatval($_POST['orig_lat']);
             $orig_lng = floatval($_POST['orig_lng']);
-            $search_rad = floatval($_POST['search_rad']);            
+            $search_rad = floatval($_POST['search_rad']);
+            $orig_text = $_POST['orig_text'];
+            
+            $orig_text_preg = preg_replace('/ /', '+', $orig_text);
+                    
+
             
             $drivers = [];
             
-            $drivers[] = ['orig_lat' => $orig_lat, 'orig_lng' => $orig_lng];
+            //$drivers[] = ['orig_lat' => $orig_lat, 'orig_lng' => $orig_lng];
 
             $connection = Yii::$app->getDb();
             
@@ -58,11 +68,27 @@ class DriversController extends Controller
             $command = $connection->createCommand("SELECT id, lat, lng, ( 3959 * acos( cos( radians( :orig_lat ) )"
                     . " * cos( radians( lat ) ) * cos( radians( lng ) - radians( :orig_lng ) ) + sin( radians( :orig_lat ) )"
                     . " * sin( radians( lat ) ) ) ) AS distance FROM drivers"
-                    . " HAVING distance < :search_rad ORDER BY distance LIMIT 10;", $params );
+                    . " HAVING distance < :search_rad ORDER BY distance LIMIT 100;", $params );
+            
+            
+            $ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
+            
+            
+            $query = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=";
+            
             
             
 
-            $drivers[] = $command->queryAll();
+            $drivers = $command->queryAll();
+            
+            for ($x = 0; $x < count($drivers); $x++) {
+                $query .= "{$drivers[$x]['lat']}%2C{$drivers[$x]['lng']}%7C";
+            }
+            
+            $query .= "&key={$api_key}";
+            
+            debug($query);
+            die;
             
             $drivers = json_encode($drivers);
 
@@ -70,10 +96,10 @@ class DriversController extends Controller
 
         } else {
             
-            $ddd = file_get_contents('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk');
+            //$ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
             
-            debug($ddd);
-            die;
+//            debug($ddd);
+//            die;
             // либо страница отображается первый раз, либо есть ошибка в данных
             return $this->render('index', compact('model'));
         }
