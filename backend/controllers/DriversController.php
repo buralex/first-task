@@ -47,7 +47,7 @@ class DriversController extends Controller
 //            debug($_POST);
 //            die;
 
-            $api_key = "AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk";
+            $api_key = "AIzaSyCJFHPBLlPl-S5GW26uklCKy7SzHkkoc9w";
             $orig_lat = floatval($_POST['orig_lat']);
             $orig_lng = floatval($_POST['orig_lng']);
             $search_rad = intval($_POST['search_rad']);
@@ -65,13 +65,13 @@ class DriversController extends Controller
             
             $params = [':orig_lat' => $orig_lat, ':orig_lng' => $orig_lng, ':search_rad' => $search_rad];
             
-            $command = $connection->createCommand("SELECT id, lat, lng, ( 3959 * acos( cos( radians( :orig_lat ) )"
+            $command = $connection->createCommand("SELECT *, ( 3959 * acos( cos( radians( :orig_lat ) )"
                     . " * cos( radians( lat ) ) * cos( radians( lng ) - radians( :orig_lng ) ) + sin( radians( :orig_lat ) )"
                     . " * sin( radians( lat ) ) ) ) AS distance FROM drivers"
                     . " HAVING distance < :search_rad ORDER BY distance LIMIT 100;", $params );
             
             
-            //$ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
+            
             
             
             $query = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&language=en&origins={$orig_text_preg}&destinations=";
@@ -80,6 +80,9 @@ class DriversController extends Controller
             
 
             $drivers = $command->queryAll();
+            
+//            debug($drivers);
+//            die;
             
             for ($x = 0; $x < count($drivers); $x++) {
                 $query .= "{$drivers[$x]['lat']}%2C{$drivers[$x]['lng']}%7C";
@@ -90,9 +93,20 @@ class DriversController extends Controller
 //            debug($query);
 //            die;
             
-            $drivers = file_get_contents($query);
-
-            echo $drivers;
+            $roadDistance = json_decode( file_get_contents($query) );
+            
+            for ($n = 0; $n < count($drivers); $n++) {
+                $drivers[$n]['road_distance'] = $roadDistance->rows[0]->elements[$n]->distance->text;
+                $drivers[$n]['duration'] = $roadDistance->rows[0]->elements[$n]->duration->text;
+            }
+            
+            $drivers_json = json_encode( $drivers );
+            
+//            debug($roadDistance);
+//            debug($drivers);
+//            die;
+//            
+            echo $drivers_json;
 
         } else {
             
