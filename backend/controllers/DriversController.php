@@ -57,7 +57,7 @@ class DriversController extends Controller
                     
 
             
-            $drivers = [];
+            //$drivers = [];
             
             //$drivers[] = ['orig_lat' => $orig_lat, 'orig_lng' => $orig_lng];
 
@@ -71,7 +71,7 @@ class DriversController extends Controller
                     . " HAVING distance < :search_rad ORDER BY distance LIMIT 100;", $params );
             
             
-            $ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
+            //$ddd = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={$orig_text_preg}&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk");
             
             
             $query = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&language=en&origins={$orig_text_preg}&destinations=";
@@ -87,10 +87,10 @@ class DriversController extends Controller
             
             $query .= "&key={$api_key}";
             
-            debug($query);
-            die;
+//            debug($query);
+//            die;
             
-            $drivers = json_encode($drivers);
+            $drivers = file_get_contents($query);
 
             echo $drivers;
 
@@ -112,24 +112,6 @@ class DriversController extends Controller
     }
     
     
-    /**
-     * Get nearest drivers from db
-     * @param object $model
-     * @return mixed
-     */
-    public function actionStoreLocator()
-    {
-            
-        if ( Yii::$app->request->isAjax ) {
-
-echo 'dd';die;
-
-        } else {
-
-            return $this->render('store-locator');
-        }
-
-    }
 
     /**
      * Displays a single Drivers model.
@@ -162,7 +144,7 @@ echo 'dd';die;
     }
     
     /**
-     * Fills drivers table.
+     * Fills drivers table randomly.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -171,14 +153,18 @@ echo 'dd';die;
         
         $drivers = [];
         
-        for ($x = 0 ; $x < 100 ; $x++ ) {
+        for ($x = 0 ; $x < 20000 ; $x++ ) {
             $drivers[] = ["driver" . ($x + 1), rand(48, 30), rand(-123,-70)];
         }
         
 //        debug($drivers);
 //        die;
+        if ( Yii::$app->db->createCommand()->batchInsert('markers', ['name', 'lat', 'lng'], $drivers)->execute()) {
+            echo '!!!';
+        }
+       
         
-        Yii::$app->db->createCommand()->batchInsert('drivers', ['name', 'lat', 'lng'], $drivers)->execute();
+        
 
     }
 

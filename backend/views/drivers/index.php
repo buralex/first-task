@@ -26,19 +26,19 @@ $this->params['breadcrumbs'][] = $this->title;
     
     
     <div class="icon-load"></div>
-<!--    <form action="" method="" id="coordinates" class="search-form">-->
+    
 <!--        Lat: <input type="text" name="orig_lat" value="37.99616268" autofocus><br>
         Lng: <input type="text" name="orig_lng" value="-91.93359375"><br>-->
         Search radius: <br>
-        <input id="search_rad" type="text" value="10000"><br>
+        <input id="search_rad" type="text" name="search_rad" value="10000"><br>
         <br>
-        <input id="origin-input" class="search-form__origin" type="text" placeholder="Enter an origin location"><br>
+        <input id="origin-input" class="search-form__origin" type="text" name="orig_text" placeholder="Enter an origin location" required=""><br>
         <br>
         <input type="submit" class="" value="send">
         
         
 
-<!--    </form> -->
+     
 <br>
 
 
