@@ -37,8 +37,7 @@ autocomplete.addListener('place_changed', function() {
     //sendOrigin(orig_lat, orig_lng);
     console.log( 'geometry assign' );
     
-    /*------------*/
-    /*------------*/
+
     
 });
 
@@ -79,6 +78,7 @@ input.addEventListener("keypress", function(e) {
                 var drivers = JSON.parse(this.responseText);
                 
                 showDrivers(drivers);
+                //showOnMap(drivers);
 
                 //console.log(this.responseText);
 
@@ -120,68 +120,69 @@ function showDrivers(drivers) {
 
 function initMap() {
     
-    var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
+
     
     map = new google.maps.Map(document.getElementById('map'), {
         mapTypeControl: true,
         center: {lat: 39.87601942, lng: -101.29394531},
         zoom: 5
     });
-    
-    directionsDisplay.setMap(map);
-    
-//    var onChangeHandler = function() {
-//          calculateAndDisplayRoute(directionsService, directionsDisplay);
-//        };
-//        document.getElementById('start').addEventListener('change', onChangeHandler);
-//        document.getElementById('end').addEventListener('change', onChangeHandler);
-
-calculateAndDisplayRoute(directionsService, directionsDisplay);
 
 }
 
-
-
-      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-          
-        directionsService.route({
-          origin: 'Arizona, United States',
-          destination: 'New York, NY, United States',
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-        
-        directionsService.route({
-          origin: 'Arizona, United States',
-          destination: 'Boston, MA, United States',
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-        
-        directionsService.route({
-          origin: 'Arizona, United States',
-          destination: 'Texas, United States',
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-      }
-      
-
 initMap();
+
+
+//function showOnMap(drivers) {
+//        /*------map------*/
+//        console.log( drivers );
+//        var bounds = new google.maps.LatLngBounds;
+//        var markersArray = [];
+//    
+//    var geocoder = new google.maps.Geocoder;
+//    
+//    var originList = drivers.origins_addresses;
+//            var destinationList = drivers.destination_addresses;
+////            var outputDiv = document.getElementById('output');
+////            outputDiv.innerHTML = '';
+//            deleteMarkers(markersArray);
+//
+//            var showGeocodedAddressOnMap = function(asDestination) {
+//              var icon = asDestination ? destinationIcon : originIcon;
+//              return function(results, status) {
+//                if (status === 'OK') {
+//                  map.fitBounds(bounds.extend(results[0].geometry.location));
+//                  markersArray.push(new google.maps.Marker({
+//                    map: map,
+//                    position: results[0].geometry.location,
+//                    icon: icon
+//                  }));
+//                } else {
+//                  alert('Geocode was not successful due to: ' + status);
+//                }
+//              };
+//            };
+//
+//            for (var i = 0; i < originList.length; i++) {
+//              var results = response.rows[i].elements;
+//              geocoder.geocode({'address': originList[i]},
+//                  showGeocodedAddressOnMap(false));
+//              for (var j = 0; j < results.length; j++) {
+//                geocoder.geocode({'address': destinationList[j]},
+//                    showGeocodedAddressOnMap(true));
+////                outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
+////                    ': ' + results[j].distance.text + ' in ' +
+////                    results[j].duration.text + '<br>';
+//              }
+//            }
+//            
+//                  function deleteMarkers(markersArray) {
+//        for (var i = 0; i < markersArray.length; i++) {
+//          markersArray[i].setMap(null);
+//        }
+//        markersArray = [];
+//      }
+//    
+//    /*------/map------*/
+//}
 
