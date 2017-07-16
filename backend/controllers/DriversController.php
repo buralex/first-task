@@ -44,13 +44,13 @@ class DriversController extends Controller
        
         if ( Yii::$app->request->isAjax ) {
             
-            debug($_POST);
-            die;
+//            debug($_POST);
+//            die;
 
             $api_key = "AIzaSyCS_UOJWmyS_oKkPDMH84xaToDOQX5_8Lk";
-//            $orig_lat = floatval($_POST['orig_lat']);
-//            $orig_lng = floatval($_POST['orig_lng']);
-            $search_rad = floatval($_POST['search_rad']);
+            $orig_lat = floatval($_POST['orig_lat']);
+            $orig_lng = floatval($_POST['orig_lng']);
+            $search_rad = intval($_POST['search_rad']);
             $orig_text = $_POST['orig_text'];
             
             $orig_text_preg = preg_replace('/ /', '+', $orig_text);
